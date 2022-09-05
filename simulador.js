@@ -96,6 +96,8 @@ function mostrarMenu() {
     let opcion = parseInt(prompt(`Ingrese el número de la opción que desea realizar:
                         1 - Ver Planes Disponibles
                         2 - Cotizar Plan
+                        3 - Contratar Plan
+                        4 - Ver Cotizantes
                         0 - Para salir
                         `))
     menu(opcion)
