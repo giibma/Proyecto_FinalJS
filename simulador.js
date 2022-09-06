@@ -49,14 +49,13 @@ class Plan {
 }
 
 class Contratado {
-    constructor(idAfiliado, nombreAfiliado, planAsociado, generaExcedente) {
+    constructor(idAfiliado, nombreAfiliado, planAsociado) {
         this.idAfiliado = idAfiliado,
             this.nombreAfiliado = nombreAfiliado,
-            this.planAsociado = planAsociado,
-            this.generaExcedente = generaExcedente
+            this.planAsociado = planAsociado
     }
     obtenerinfoAfiliado() {
-        alert(`Contrato N° ${this.idAfiliado} Nombre Afiliado: ${this.nombreAfiliado} Plan Contratado: ${this.planAsociado} Genera Excedentes? ${this.generaExcedente}`)
+        alert(`Contrato N° ${this.idAfiliado} Nombre Afiliado: ${this.nombreAfiliado} Plan Contratado: ${this.planAsociado}`)
     }
 }
 //Variables
@@ -73,28 +72,25 @@ carteraPlanes.push(plan1, plan2, plan3)
 //------------------------------------------------------------------------------
 //Funciones
 function planesDisponibles(plan) {
-    alert(
-        plan.forEach((carteraPlanes) => {
-            carteraPlanes.mostrarPlanes()
-        }))
+
+    plan.forEach((carteraPlanes) => { carteraPlanes.mostrarPlanes() })
 }
 
 function verCotizantes(pers) {
-    alert(
-        pers.forEach((personas) => {
+    if (pers.length == 0) {
+        alert("No Hemos Encontrado Cotizantes")
+    } else {
+        pers.forEach((personas) => { alert(`El Cotizante numero: ${personas.obtenerId()} es ${personas.obtenerNombre()}`) })
+    }
 
-            alert(`El Cotizante numero: ${personas.obtenerId()} es ${personas.obtenerNombre()}`)
-        }))
 }
 
-function verContratados(cont){
-    alert(
-        cont.forEach((contratos) => {
-
-            alert(contratos.obtenerinfoAfiliado())
-
-        }
-    ))
+function verContratados(cont) {
+    if (cont.length == 0) {
+        alert("No Hemos Encontrado Contratos")
+    } else {
+        cont.forEach((contratos) => { contratos.obtenerinfoAfiliado() })
+    }
 }
 
 function calcularExcedentes(valorPlan, primaCotizante) {
@@ -111,33 +107,25 @@ function cotizarPlan(pers) {
     let sueldo = parseFloat(prompt("Ingresa tu Sueldo"))
     let telefono = prompt("Ingresa tu Telefono")
     let personaCreada = new Persona(personas.length + 1, nombre, edad, sueldo, telefono)
-    console.log(personas)
     pers.push(personaCreada)
     return personaCreada
 }
 
 function verOpcionesDePlanes(plan, pers) {
-    console.log(plan, pers)
+    
     plan.forEach((carteraPlanes) => {
 
         if (pers.obtenerPrima() >= carteraPlanes.devolverCosto()) {
             alert(`Hola ${pers.obtenerNombre()} Con tu prima mensual puedes optar al siguiente Plan: ${carteraPlanes.devolverNombre()}, ${carteraPlanes.devolverCaracteristicas()}, Ademas tu Prima Genera: ${calcularExcedentes(pers.obtenerPrima(), carteraPlanes.devolverCosto())} en Excedentes`)
             let respuesta = prompt(`Deseas Contratar Plan: ${carteraPlanes.devolverNombre()} SI o NO`)
             if (respuesta.toLocaleLowerCase() === "si") {
-                if (calcularExcedentes(pers.obtenerPrima(), carteraPlanes.devolverCosto()) > 0) {
-                    let contratar = new Contratado(contratos.length + 1, pers.obtenerNombre(), carteraPlanes.devolverNombre(),true)
-                    contratos.push(contratar)
-                    alert(`Bienvenido a nuestra Empresa ${pers.obtenerNombre()}, Acabas de Contratar el Plan ${carteraPlanes.devolverNombre()}`)
-                }
-                else{
-                    let contratar = new Contratado(contratos.length + 1, pers.obtenerNombre(), carteraPlanes.devolverNombre(),false)
-                    contratos.push(contratar)
-                    alert(`Bienvenido a nuestra Empresa ${pers.obtenerNombre()}, Acabas de Contratar el Plan ${carteraPlanes.devolverNombre()}`)
-                }
-            }else if(respuesta.toLocaleLowerCase() === "no"){
+
+                let contratar = new Contratado(contratos.length + 1, pers.obtenerNombre(), carteraPlanes.devolverNombre())
+                contratos.push(contratar)
+                alert(`Bienvenido a nuestra Empresa ${pers.obtenerNombre()}, Acabas de Contratar el Plan ${carteraPlanes.devolverNombre()}`)
+
+            } else {
                 alert("Hasta Luego!")
-            }else{
-                alert("ingresa una opcion valida")
             }
         }
         else if (pers.obtenerPrima() < carteraPlanes.devolverCosto()) {
@@ -146,6 +134,42 @@ function verOpcionesDePlanes(plan, pers) {
     })
 }
 
+function buscarContrato(contr) {
+    if (contr.length == 0) { 
+        alert("Aun no se han creado nuevos contratos, intenta cotizar y contratar uno")
+    } else {
+        let buscar = parseInt(prompt("Ingresa el Numero de Contrato que deseas buscar"))
+        let busqueda = contratos.filter((contrato) => contrato.idAfiliado == buscar)
+        if (busqueda.length == 0) {
+            alert("No Hemos Encontrado este Contrato")
+        } else {
+            alert(`Hemos encontrado las siguientes coincidencias`)
+            for (let contratoEncontrado of busqueda) {
+                contratoEncontrado.obtenerinfoAfiliado()
+            }
+        }
+    }
+
+
+}
+
+function eliminarContrato(contr) {
+
+    if (contr.length == 0) {
+        alert("No Existen Contratos para Eliminar")
+    }
+    else {
+        let buscar = parseInt(prompt("Ingresa el Numero de Contrato que deseas Eliminar"))
+        contratos.forEach(function (cont, index, obj) {
+            if (cont.idAfiliado === buscar) {
+                obj.splice(index, 1)
+                alert(`Se ha Eliminado el contrato ${cont.idAfiliado} para el cliente: ${cont.nombreAfiliado}`)
+            }
+        })
+    }
+
+
+}
 
 
 
@@ -155,6 +179,8 @@ function mostrarMenu() {
                         2 - Cotizar Plan
                         3 - Ver Cotizantes
                         4 - Ver Contratados
+                        5 - Buscar Contrato
+                        6 - Eliminar Contrato
                         0 - Para salir
                         `))
     menu(opcion)
@@ -172,7 +198,7 @@ function menu(opcion) {
         case 2:
             let pers = cotizarPlan(personas)
             if (pers.obtenerEdad() >= 18) {
-                console.log(pers)
+                
                 verOpcionesDePlanes(carteraPlanes, pers)
 
             }
@@ -182,10 +208,16 @@ function menu(opcion) {
             break
         case 3:
             verCotizantes(personas)
-            console.log(personas)
+            
             break
         case 4:
             verContratados(contratos)
+            break
+        case 5:
+            buscarContrato(contratos)
+            break
+        case 6:
+            eliminarContrato(contratos)
             break
         default:
             alert("ingrese una opcion del Menu")
