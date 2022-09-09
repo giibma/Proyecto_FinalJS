@@ -65,7 +65,7 @@ const carteraPlanes = []
 const contratos = []
 const plan1 = new Plan("A", "Full Cobertura", 8000)
 const plan2 = new Plan("B", "Cobertura SemiFull", 4000)
-const plan3 = new Plan("C", "Cobertura Basica", 3500)
+const plan3 = new Plan("C", "Cobertura Basica", 3000)
 carteraPlanes.push(plan1, plan2, plan3)
 
 
