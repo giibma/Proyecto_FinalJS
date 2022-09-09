@@ -63,14 +63,24 @@ let salir
 const personas = []
 const carteraPlanes = []
 const contratos = []
-const plan1 = new Plan("A", "Full Cobertura", 120000)
-const plan2 = new Plan("B", "Cobertura SemiFull", 80000)
-const plan3 = new Plan("C", "Cobertura Basica", 40000)
+const plan1 = new Plan("A", "Full Cobertura", 8000)
+const plan2 = new Plan("B", "Cobertura SemiFull", 4000)
+const plan3 = new Plan("C", "Cobertura Basica", 3500)
 carteraPlanes.push(plan1, plan2, plan3)
 
 
 //------------------------------------------------------------------------------
 //Funciones
+function crearPlan()
+{
+    let nombre = prompt("Ingrese nombre del Plan")
+    let caracteristicas = prompt("Ingrese Caracteristicas del Plan")
+    let valor = parseFloat(prompt("Ingrese Valor del Plan"))
+    let plan = new Plan(nombre,caracteristicas,valor)
+    carteraPlanes.push(plan)
+    return alert(`Se ha creado el nuevo plan ${nombre}`)
+
+}
 function planesDisponibles(plan) {
 
     plan.forEach((carteraPlanes) => { carteraPlanes.mostrarPlanes() })
@@ -175,12 +185,13 @@ function eliminarContrato(contr) {
 
 function mostrarMenu() {
     let opcion = parseInt(prompt(`Ingrese el número de la opción que desea realizar:
-                        1 - Ver Planes Disponibles
-                        2 - Cotizar Plan
-                        3 - Ver Cotizantes
-                        4 - Ver Contratados
-                        5 - Buscar Contrato
-                        6 - Eliminar Contrato
+                        1 - Crear Plan
+                        2 - Ver Planes Disponibles
+                        3 - Cotizar Plan
+                        4 - Ver Cotizantes
+                        5 - Ver Contratados
+                        6 - Buscar Contrato
+                        7 - Eliminar Contrato
                         0 - Para salir
                         `))
     menu(opcion)
@@ -193,9 +204,12 @@ function menu(opcion) {
             alert("Que tengas buen dia")
             break
         case 1:
-            planesDisponibles(carteraPlanes)
+            crearPlan()
             break
         case 2:
+            planesDisponibles(carteraPlanes)
+            break
+        case 3:
             let pers = cotizarPlan(personas)
             if (pers.obtenerEdad() >= 18) {
                 
@@ -206,17 +220,17 @@ function menu(opcion) {
                 alert("Debes ser mayor de 18 años para cotizar un Plan")
             }
             break
-        case 3:
+        case 4:
             verCotizantes(personas)
             
             break
-        case 4:
+        case 5:
             verContratados(contratos)
             break
-        case 5:
+        case 6:
             buscarContrato(contratos)
             break
-        case 6:
+        case 7:
             eliminarContrato(contratos)
             break
         default:
