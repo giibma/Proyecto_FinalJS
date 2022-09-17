@@ -2,11 +2,11 @@
 class Persona {
     constructor(id, nombre, edad, sueldo, telefono) {
         this.id = id,
-            this.nombre = nombre,
-            this.edad = edad,
-            this.sueldo = sueldo
+        this.nombre = nombre,
+        this.edad = edad,
+        this.sueldo = sueldo
         this.telefono = telefono,
-            this.prima = this.sueldo * 0.07
+        this.prima = this.sueldo * 0.07
 
     }
     obtenerId() {
@@ -28,10 +28,11 @@ class Persona {
 }
 
 class Plan {
-    constructor(nombre, caracteristicas, costo) {
+    constructor(id,nombre, caracteristicas, costo) {
+        this.id = id,
         this.nombre = nombre,
-            this.caracteristicas = caracteristicas,
-            this.costo = costo
+        this.caracteristicas = caracteristicas,
+        this.costo = costo
     }
     mostrarPlanes() {
         alert(`Nombre del Plan: ${this.nombre}, Tipo de Plan: ${this.caracteristicas}, Valor del Plan: ${this.costo}`)
@@ -63,89 +64,123 @@ let salir
 const personas = []
 const carteraPlanes = []
 const contratos = []
-const plan1 = new Plan("A", "Full Cobertura", 8000)
-const plan2 = new Plan("B", "Cobertura SemiFull", 4000)
-const plan3 = new Plan("C", "Cobertura Basica", 3000)
+const plan1 = new Plan(1,"A", "Full Cobertura", 8000)
+const plan2 = new Plan(2,"B", "Cobertura SemiFull", 4000)
+const plan3 = new Plan(3,"C", "Cobertura Basica", 3000)
 carteraPlanes.push(plan1, plan2, plan3)
 
 
 //------------------------------------------------------------------------------
 //Funciones
-function crearPlan()
-{
-    let nombre = prompt("Ingrese nombre del Plan")
-    let caracteristicas = prompt("Ingrese Caracteristicas del Plan")
-    let valor = parseFloat(prompt("Ingrese Valor del Plan"))
-    let plan = new Plan(nombre,caracteristicas,valor)
+function crearPlan() {
+    let nom = document.getElementById("nombre")
+    let carac = document.getElementById("caracteristica")
+    let costo = document.getElementById("costo")
+    let plan = new Plan(carteraPlanes.length+1,nom.value, carac.value, costo.value)
     carteraPlanes.push(plan)
-    return alert(`Se ha creado el nuevo plan ${nombre}`)
+    let selec = document.getElementById("dvCreacion")
+    let mensaje = document.createElement("h3")
+    mensaje.innerText = "Plan Creado!"
+    selec.appendChild(mensaje)
+    nom.value = ""
+    carac.value = ""
+    costo.value = ""
 
-}
-function planesDisponibles(plan) {
-
-    plan.forEach((carteraPlanes) => { carteraPlanes.mostrarPlanes() })
-}
-
-function verCotizantes(pers) {
-    if (pers.length == 0) {
-        alert("No Hemos Encontrado Cotizantes")
-    } else {
-        pers.forEach((personas) => { alert(`El Cotizante numero: ${personas.obtenerId()} es ${personas.obtenerNombre()}`) })
-    }
-
-}
-
-function verContratados(cont) {
-    if (cont.length == 0) {
-        alert("No Hemos Encontrado Contratos")
-    } else {
-        cont.forEach((contratos) => { contratos.obtenerinfoAfiliado() })
-    }
-}
-
-function calcularExcedentes(valorPlan, primaCotizante) {
-    let excedentes = (primaCotizante - valorPlan) * -1
-    return excedentes;
 
 
 }
-
-function cotizarPlan(pers) {
-
-    let nombre = prompt("Ingresa tu nombre")
-    let edad = parseInt(prompt("Ingresa tu Edad"))
-    let sueldo = parseFloat(prompt("Ingresa tu Sueldo"))
-    let telefono = prompt("Ingresa tu Telefono")
-    let personaCreada = new Persona(personas.length + 1, nombre, edad, sueldo, telefono)
-    pers.push(personaCreada)
-    return personaCreada
-}
-
-function verOpcionesDePlanes(plan, pers) {
-    
-    plan.forEach((carteraPlanes) => {
-
-        if (pers.obtenerPrima() >= carteraPlanes.devolverCosto()) {
-            alert(`Hola ${pers.obtenerNombre()} Con tu prima mensual puedes optar al siguiente Plan: ${carteraPlanes.devolverNombre()}, ${carteraPlanes.devolverCaracteristicas()}, Ademas tu Prima Genera: ${calcularExcedentes(pers.obtenerPrima(), carteraPlanes.devolverCosto())} en Excedentes`)
-            let respuesta = prompt(`Deseas Contratar Plan: ${carteraPlanes.devolverNombre()} SI o NO`)
-            if (respuesta.toLocaleLowerCase() === "si") {
-
-                let contratar = new Contratado(contratos.length + 1, pers.obtenerNombre(), carteraPlanes.devolverNombre())
-                contratos.push(contratar)
-                alert(`Bienvenido a nuestra Empresa ${pers.obtenerNombre()}, Acabas de Contratar el Plan ${carteraPlanes.devolverNombre()}`)
-
-            } else {
-                alert("Hasta Luego!")
-            }
-        }
-        else if (pers.obtenerPrima() < carteraPlanes.devolverCosto()) {
-            alert(`Plan: ${carteraPlanes.devolverNombre()}, no Disponible para tu Prima Mensual`)
-        }
+function planesDisponibles() {
+    let divSeleccion = document.getElementById("seleccion")
+    divSeleccion.innerHTML = ""
+    carteraPlanes.forEach((carteraPlanes) => {
+        let mostrarPlanes = document.createElement("div")
+        mostrarPlanes.innerHTML = `<div id="">
+                                        <p>ID: ${carteraPlanes.id}</p>
+                                        <p>Nombre: ${carteraPlanes.devolverNombre()}</p>
+                                        <p>Cobertura: ${carteraPlanes.devolverCaracteristicas()}</p>
+                                        <p>Costo: ${carteraPlanes.devolverCosto()}</p>
+                                    </div>`
+        divSeleccion.append(mostrarPlanes)
     })
 }
 
+function cotizarPlan() {
+
+    let nombre = document.getElementById("nombre")
+    let edad = document.getElementById("edad")
+    let sueldo = document.getElementById("sueldo")
+    let telefono = document.getElementById("telefono")
+    let personaCreada = new Persona(personas.length + 1, nombre.value, edad.value, sueldo.value, telefono.value)
+    personas.push(personaCreada)
+    let prim = document.createElement("h4")
+    prim.innerHTML = `Tu Prima es ${personaCreada.prima}`
+    selec = document.getElementById("dvCotizar")
+    selec.appendChild(prim)
+    carteraPlanes.forEach((carteraPlanes) => {
+        if (carteraPlanes.costo <= personaCreada.prima) {
+            let mostrarPlanes = document.createElement("div")
+            mostrarPlanes.innerHTML = `<div id="divPlan">
+                                        <h3> Plan Disponible para tu Prima!</h3>
+                                        <p id="nombrePlan">Nombre: ${carteraPlanes.nombre} </p>
+                                        <p>Cobertura: ${carteraPlanes.caracteristicas} </p>
+                                        <p>Costo: ${carteraPlanes.costo}</p>
+                                        <p>Excedentes: ${personaCreada.prima-carteraPlanes.costo} </p><br>
+                                        <button id="${carteraPlanes.id}">Contratar Plan</button>
+                                    </div>`
+            selec.appendChild(mostrarPlanes)
+            let btnContratar = document.getElementById(`${carteraPlanes.id}`)
+            btnContratar.addEventListener("click", crearContrato)
+            
+            
+        } else {
+
+        }
+     
+        
+    })
+
+}
+
+function verCotizantes() {
+    if (personas.length == 0) {
+        let divSeleccion = document.getElementById("seleccion")
+        divSeleccion.innerHTML = ""
+        let mensaje = document.createElement("H3")
+        mensaje.innerHTML = "No Existen Cotizantes Aun"
+        divSeleccion.appendChild(mensaje)
+    } else {
+        personas.forEach((personas) => { alert(`El Cotizante numero: ${personas.obtenerId()} es ${personas.obtenerNombre()}`) })
+    }
+
+}
+
+function verContratados() {
+    if (contratos.length == 0) {
+        alert("No Hemos Encontrado Contratos")
+    } else {
+        contratos.forEach((contratos) => { contratos.obtenerinfoAfiliado() })
+    }
+}
+
+
+
+function crearContrato() {
+
+    nomA = document.getElementById("nombre").value
+    nomPlan = document.getElementById("nombrePlan").innerText
+    alert(nomPlan)
+    let contratar = new Contratado(contratos.length + 1, nomA, nomPlan)
+    contratos.push(contratar)
+    let selec = document.getElementById("divPlan")
+    let mensaje = document.createElement("h3")
+    mensaje.innerText = "Has Contratado un Plan!"
+    selec.appendChild(mensaje)
+    
+}
+
+
 function buscarContrato(contr) {
-    if (contr.length == 0) { 
+    if (contr.length == 0) {
         alert("Aun no se han creado nuevos contratos, intenta cotizar y contratar uno")
     } else {
         let buscar = parseInt(prompt("Ingresa el Numero de Contrato que deseas buscar"))
@@ -181,65 +216,55 @@ function eliminarContrato(contr) {
 
 }
 
+//Creaciones HTML Menu
 
-
-function mostrarMenu() {
-    let opcion = parseInt(prompt(`Ingrese el número de la opción que desea realizar:
-                        1 - Crear Plan
-                        2 - Ver Planes Disponibles
-                        3 - Cotizar Plan
-                        4 - Ver Cotizantes
-                        5 - Ver Contratados
-                        6 - Buscar Contrato
-                        7 - Eliminar Contrato
-                        0 - Para salir
-                        `))
-    menu(opcion)
-}
-
-function menu(opcion) {
-    switch (opcion) {
-        case 0:
-            salir = true
-            alert("Que tengas buen dia")
-            break
-        case 1:
-            crearPlan()
-            break
-        case 2:
-            planesDisponibles(carteraPlanes)
-            break
-        case 3:
-            let pers = cotizarPlan(personas)
-            if (pers.obtenerEdad() >= 18) {
-                
-                verOpcionesDePlanes(carteraPlanes, pers)
-
-            }
-            else {
-                alert("Debes ser mayor de 18 años para cotizar un Plan")
-            }
-            break
-        case 4:
-            verCotizantes(personas)
-            
-            break
-        case 5:
-            verContratados(contratos)
-            break
-        case 6:
-            buscarContrato(contratos)
-            break
-        case 7:
-            eliminarContrato(contratos)
-            break
-        default:
-            alert("ingrese una opcion del Menu")
-    }
+function crearMenuCreacionPlan() {
+    let divSeleccion = document.getElementById("seleccion")
+    divSeleccion.innerHTML = ""
+    let estructura = document.createElement("div")
+    estructura.innerHTML = `<div id="dvCreacion">
+                                <br>
+                                <p>Nombre: <input id="nombre" type="text"> </p>
+                                <p>Cobertura: <input id="caracteristica" type="text"> </p>
+                                <p>Costo: <input id="costo" type="text"> </p>
+                                <button id="crear">Crear Plan </button>
+                            </div>`
+    divSeleccion.appendChild(estructura)
+    let btnCreacion = document.getElementById("crear")
+    btnCreacion.addEventListener("click", crearPlan)
 
 }
-//-------------------------------------------------------------------------------------
-//Simulador
-while (salir != true) {
-    mostrarMenu()
+
+function crearMenuCotizante() {
+    let divSeleccion = document.getElementById("seleccion")
+    divSeleccion.innerHTML = ""
+    let estructura = document.createElement("div")
+    estructura.innerHTML = `<div id="dvCotizar">
+                            <br>
+                            <p>Nombre: <input id="nombre" type="text"> </p>
+                            <p>Edad: <input id="edad" type="text"> </p>
+                            <p>Sueldo: <input id="sueldo" type="text"> </p>
+                            <p>Telefono: <input id="telefono" type="text"></p>
+                            <button id="cotizar">Cotizar</button>
+                            </div>`
+    divSeleccion.appendChild(estructura)
+    let btnCotizacion = document.getElementById("cotizar")
+    btnCotizacion.addEventListener("click", cotizarPlan)
+
 }
+//Interaccion Doom y Eventos
+let btnCrearPlan = document.getElementById("crearPlan")
+btnCrearPlan.addEventListener("click", crearMenuCreacionPlan)
+
+let btnVerPlanes = document.getElementById("verPlanes")
+btnVerPlanes.addEventListener("click", planesDisponibles)
+
+let btnCotizar = document.getElementById("cotizarPlan")
+btnCotizar.addEventListener("click", crearMenuCotizante)
+
+let btnVerCotizantes = document.getElementById("verCotizantes")
+btnVerCotizantes.addEventListener("click", verCotizantes)
+
+let btnVerContratados = document.getElementById("verContratos")
+btnVerContratados.addEventListener("click",verContratados)
+
