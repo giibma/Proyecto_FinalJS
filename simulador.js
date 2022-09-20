@@ -34,6 +34,9 @@ class Plan {
         this.caracteristicas = caracteristicas,
         this.costo = costo
     }
+    mostrarId(){
+        return this.id
+    }
     mostrarPlanes() {
         alert(`Nombre del Plan: ${this.nombre}, Tipo de Plan: ${this.caracteristicas}, Valor del Plan: ${this.costo}`)
     }
@@ -121,7 +124,7 @@ function cotizarPlan() {
             let mostrarPlanes = document.createElement("div")
             mostrarPlanes.innerHTML = `<div id="divPlan">
                                         <h3> Plan Disponible para tu Prima!</h3>
-                                        <p id="nombrePlan">Nombre: ${carteraPlanes.nombre} </p>
+                                        <p id="${carteraPlanes.nombre}">Nombre: ${carteraPlanes.nombre} </p>
                                         <p>Cobertura: ${carteraPlanes.caracteristicas} </p>
                                         <p>Costo: ${carteraPlanes.costo}</p>
                                         <p>Excedentes: ${personaCreada.prima-carteraPlanes.costo} </p><br>
@@ -139,6 +142,26 @@ function cotizarPlan() {
         
     })
 
+}
+
+function crearContrato(evt) {
+    console.log(evt)
+    let id = evt.target.id
+    console.log(id)
+    let plan = carteraPlanes.find(function (element){
+        console.log(element,id)
+        return element.mostrarId() === parseInt(id)
+        
+    })
+    console.log(plan)
+    nomA = document.getElementById("nombre").value
+    let contratar = new Contratado(contratos.length + 1, nomA, plan.devolverNombre())
+    contratos.push(contratar)
+    let selec = document.getElementById("divPlan")
+    let mensaje = document.createElement("h3")
+    mensaje.innerText = "Has Contratado un Plan!"
+    selec.appendChild(mensaje)
+    
 }
 
 function verCotizantes() {
@@ -164,19 +187,7 @@ function verContratados() {
 
 
 
-function crearContrato() {
 
-    nomA = document.getElementById("nombre").value
-    nomPlan = document.getElementById("nombrePlan").innerText
-    alert(nomPlan)
-    let contratar = new Contratado(contratos.length + 1, nomA, nomPlan)
-    contratos.push(contratar)
-    let selec = document.getElementById("divPlan")
-    let mensaje = document.createElement("h3")
-    mensaje.innerText = "Has Contratado un Plan!"
-    selec.appendChild(mensaje)
-    
-}
 
 
 function buscarContrato(contr) {
