@@ -1,38 +1,11 @@
 //Objetos necesarios
-/*class Persona {
-    constructor(id, nombre, edad, sueldo, telefono) {
-        this.id = id,
-        this.nombre = nombre,
-        this.edad = edad,
-        this.sueldo = sueldo
-        this.telefono = telefono,
-        this.prima = this.sueldo * 0.07
-
-    }
-    obtenerId() {
-        return this.id
-    }
-    obtenerNombre() {
-        return this.nombre
-    }
-    obtenerPrima() {
-        return this.prima
-    }
-
-    obtenerEdad() {
-        return this.edad
-    }
-    obtenerTelefono() {
-        return this.telefono
-    }
-}
-*/
 class Plan {
-    constructor(id,nombre, caracteristicas, costo) {
+    constructor(id,nombre, cobertura,costo) {
         this.id = id,
         this.nombre = nombre,
-        this.caracteristicas = caracteristicas,
+        this.cobertura = cobertura,
         this.costo = costo
+        
     }
     mostrarId(){
         return this.id
@@ -43,9 +16,10 @@ class Plan {
     devolverNombre() {
         return this.nombre
     }
-    devolverCaracteristicas() {
-        return this.caracteristicas
+    devolverCobertura() {
+        return this.cobertura
     }
+    
 
 }
 
@@ -59,10 +33,10 @@ class Contrato {
 //Variables
 const carteraPlanes = []
 const contratos = []
-const plan1 = new Plan(1,"Plan Premium Full", "Full Cobertura", 8000)
-const plan2 = new Plan(2,"Plan Premium Semi", "Cobertura SemiFull", 4000)
-const plan3 = new Plan(3,"Plan Full Basico", "Cobertura Basica", 3000)
-const plan4 = new Plan(3,"Plan Semi Basico", "Cobertura Basica", 3000)
+const plan1 = new Plan(1,"Plan Premium Full", "Full Cobertura",15000)
+const plan2 = new Plan(2,"Plan Premium Semi", "Cobertura SemiFull", 9000)
+const plan3 = new Plan(3,"Plan Basico Full", "Cobertura Basica", 6000)
+const plan4 = new Plan(4,"Plan Basico", "Cobertura Basica", 3000)
 carteraPlanes.push(plan1, plan2, plan3,plan4)
 
 
@@ -81,12 +55,32 @@ function planesDisponibles() {
         mostrarPlanes.innerHTML = `
             <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
             <h4><strong>${carteraPlanes.nombre}</strong></h4>
-            <p class="text-faded mb-0"><strong>Cobertura: ${carteraPlanes.caracteristicas}</strong></p>
+            <p class="text-faded mb-0"><strong>Cobertura: ${carteraPlanes.cobertura}</strong></p>
             <p class="text-faded mb-0"><strong>Costo: ${carteraPlanes.costo}<strong></p>
-           
+            <button type="button" class="btn btn-primary btn-lg" id="${carteraPlanes.id}">Ver Detalle</button>
     </div>`
         divSeleccion.appendChild(mostrarPlanes)
+        let btnDetalle = document.getElementById(`${carteraPlanes.id}`)
+        btnDetalle.addEventListener("click",verDetallePlan)
     })
+}
+function verDetallePlan(evt){
+    console.log(evt)
+    let id = evt.target.id
+    let plan = carteraPlanes.find(function (element){
+        console.log(element,id)
+        return element.mostrarId() === parseInt(id)
+        
+    })
+    let sueldoSugerido = Math.round(((plan.devolverCosto()*100)/0.07)/100)
+    Swal.fire({
+        title: `${plan.cobertura}`,
+        icon: `info`,
+        text: `Sueldo Sugerido: ${sueldoSugerido}`
+              
+        
+    })
+    
 }
 function verOpcionesPlanes(){
     let sueldo = document.getElementById("inputSueldo").value
@@ -101,7 +95,7 @@ function verOpcionesPlanes(){
             mostrarPlan.innerHTML=`
             <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
             <h4><strong>${carteraPlanes.nombre}</strong></h4>
-            <p class="text-faded mb-0"><strong>Cobertura: ${carteraPlanes.caracteristicas}</strong></p>
+            <p class="text-faded mb-0"><strong>Cobertura: ${carteraPlanes.cobertura}</strong></p>
             <p class="text-faded mb-0"><strong>Costo: ${carteraPlanes.costo}<strong></p>
             <button type="button" class="btn btn-primary btn-lg" id="${carteraPlanes.id}">Contratar Plan!</button>
             </div>`
@@ -112,7 +106,7 @@ function verOpcionesPlanes(){
             mostrarPlan.innerHTML=`
             <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
             <h4><strong>${carteraPlanes.nombre}</strong></h4>
-            <p class="text-faded mb-0"><strong>Cobertura: ${carteraPlanes.caracteristicas}</strong></p>
+            <p class="text-faded mb-0"><strong>Cobertura: ${carteraPlanes.cobertura}</strong></p>
             <p class="text-faded mb-0"><strong>Costo: ${carteraPlanes.costo}<strong></p>
             <button type="button" class="btn btn-primary btn-lg" id="${carteraPlanes.id}" disabled>No Disponible</button>
             </div>`
