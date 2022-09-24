@@ -1,5 +1,5 @@
 //Objetos necesarios
-class Persona {
+/*class Persona {
     constructor(id, nombre, edad, sueldo, telefono) {
         this.id = id,
         this.nombre = nombre,
@@ -26,7 +26,7 @@ class Persona {
         return this.telefono
     }
 }
-
+*/
 class Plan {
     constructor(id,nombre, caracteristicas, costo) {
         this.id = id,
@@ -36,9 +36,6 @@ class Plan {
     }
     mostrarId(){
         return this.id
-    }
-    mostrarPlanes() {
-        alert(`Nombre del Plan: ${this.nombre}, Tipo de Plan: ${this.caracteristicas}, Valor del Plan: ${this.costo}`)
     }
     devolverCosto() {
         return this.costo
@@ -52,59 +49,77 @@ class Plan {
 
 }
 
-class Contratado {
+class Contrato {
     constructor(idAfiliado, nombreAfiliado, planAsociado) {
         this.idAfiliado = idAfiliado,
-            this.nombreAfiliado = nombreAfiliado,
-            this.planAsociado = planAsociado
-    }
-    obtenerinfoAfiliado() {
-        alert(`Contrato N° ${this.idAfiliado} Nombre Afiliado: ${this.nombreAfiliado} Plan Contratado: ${this.planAsociado}`)
+        this.nombreAfiliado = nombreAfiliado,
+        this.planAsociado = planAsociado
     }
 }
 //Variables
-let salir
-const personas = []
 const carteraPlanes = []
 const contratos = []
-const plan1 = new Plan(1,"A", "Full Cobertura", 8000)
-const plan2 = new Plan(2,"B", "Cobertura SemiFull", 4000)
-const plan3 = new Plan(3,"C", "Cobertura Basica", 3000)
-carteraPlanes.push(plan1, plan2, plan3)
+const plan1 = new Plan(1,"Plan Premium Full", "Full Cobertura", 8000)
+const plan2 = new Plan(2,"Plan Premium Semi", "Cobertura SemiFull", 4000)
+const plan3 = new Plan(3,"Plan Full Basico", "Cobertura Basica", 3000)
+const plan4 = new Plan(3,"Plan Semi Basico", "Cobertura Basica", 3000)
+carteraPlanes.push(plan1, plan2, plan3,plan4)
 
 
 //------------------------------------------------------------------------------
 //Funciones
 function crearPlan() {
-    let nom = document.getElementById("nombre")
-    let carac = document.getElementById("caracteristica")
-    let costo = document.getElementById("costo")
-    let plan = new Plan(carteraPlanes.length+1,nom.value, carac.value, costo.value)
-    carteraPlanes.push(plan)
-    let selec = document.getElementById("dvCreacion")
-    let mensaje = document.createElement("h3")
-    mensaje.innerText = "Plan Creado!"
-    selec.appendChild(mensaje)
-    nom.value = ""
-    carac.value = ""
-    costo.value = ""
-
-
+   
 
 }
 function planesDisponibles() {
-    let divSeleccion = document.getElementById("seleccion")
+    let divSeleccion = document.getElementById("mostrarPlanes")
     divSeleccion.innerHTML = ""
     carteraPlanes.forEach((carteraPlanes) => {
-        let mostrarPlanes = document.createElement("div")
-        mostrarPlanes.innerHTML = `<div id="">
-                                        <p>ID: ${carteraPlanes.id}</p>
-                                        <p>Nombre: ${carteraPlanes.devolverNombre()}</p>
-                                        <p>Cobertura: ${carteraPlanes.devolverCaracteristicas()}</p>
-                                        <p>Costo: ${carteraPlanes.devolverCosto()}</p>
-                                    </div>`
-        divSeleccion.append(mostrarPlanes)
+        const mostrarPlanes = document.createElement("div")
+        mostrarPlanes.className = "col-lg-3 col-md-6 mb-5 mb-lg-0"
+        mostrarPlanes.innerHTML = `
+            <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
+            <h4><strong>${carteraPlanes.nombre}</strong></h4>
+            <p class="text-faded mb-0"><strong>Cobertura: ${carteraPlanes.caracteristicas}</strong></p>
+            <p class="text-faded mb-0"><strong>Costo: ${carteraPlanes.costo}<strong></p>
+           
+    </div>`
+        divSeleccion.appendChild(mostrarPlanes)
     })
+}
+function verOpcionesPlanes(){
+    let sueldo = document.getElementById("inputSueldo").value
+    let prima = sueldo*0.07
+    console.log(prima)
+    let divSeleccion = document.getElementById("mostrarOpciones")
+    divSeleccion.innerHTML=""
+    carteraPlanes.forEach((carteraPlanes)=>{
+        if(prima >= carteraPlanes.costo){
+            let mostrarPlan = document.createElement("div")
+            mostrarPlan.className="col-lg-3 col-md-6 mb-5 mb-lg-0"
+            mostrarPlan.innerHTML=`
+            <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
+            <h4><strong>${carteraPlanes.nombre}</strong></h4>
+            <p class="text-faded mb-0"><strong>Cobertura: ${carteraPlanes.caracteristicas}</strong></p>
+            <p class="text-faded mb-0"><strong>Costo: ${carteraPlanes.costo}<strong></p>
+            <button type="button" class="btn btn-primary btn-lg" id="${carteraPlanes.id}">Contratar Plan!</button>
+            </div>`
+            divSeleccion.appendChild(mostrarPlan)
+        }else if(prima < carteraPlanes.costo){
+            let mostrarPlan = document.createElement("div")
+            mostrarPlan.className="col-lg-3 col-md-6 mb-5 mb-lg-0"
+            mostrarPlan.innerHTML=`
+            <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
+            <h4><strong>${carteraPlanes.nombre}</strong></h4>
+            <p class="text-faded mb-0"><strong>Cobertura: ${carteraPlanes.caracteristicas}</strong></p>
+            <p class="text-faded mb-0"><strong>Costo: ${carteraPlanes.costo}<strong></p>
+            <button type="button" class="btn btn-primary btn-lg" id="${carteraPlanes.id}" disabled>No Disponible</button>
+            </div>`
+            divSeleccion.appendChild(mostrarPlan)
+        }
+    })
+    
 }
 
 function cotizarPlan() {
@@ -184,12 +199,6 @@ function verContratados() {
         contratos.forEach((contratos) => { contratos.obtenerinfoAfiliado() })
     }
 }
-
-
-
-
-
-
 function buscarContrato(contr) {
     if (contr.length == 0) {
         alert("Aun no se han creado nuevos contratos, intenta cotizar y contratar uno")
@@ -264,7 +273,7 @@ function crearMenuCotizante() {
 
 }
 //Interaccion Doom y Eventos
-let btnCrearPlan = document.getElementById("crearPlan")
+/*let btnCrearPlan = document.getElementById("crearPlan")
 btnCrearPlan.addEventListener("click", crearMenuCreacionPlan)
 
 let btnVerPlanes = document.getElementById("verPlanes")
@@ -278,4 +287,8 @@ btnVerCotizantes.addEventListener("click", verCotizantes)
 
 let btnVerContratados = document.getElementById("verContratos")
 btnVerContratados.addEventListener("click",verContratados)
-
+*/
+let cargaPlanes = document.getElementById("cargarPlanes")
+cargaPlanes.addEventListener("click",planesDisponibles)
+let verOpciones = document.getElementById("inputSueldo")
+verOpciones.addEventListener("change",verOpcionesPlanes)
