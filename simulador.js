@@ -1,9 +1,10 @@
 //Objetos necesarios
 class Plan {
-    constructor(id,nombre, cobertura,costo) {
+    constructor(id,nombre, cobertura,caracteristicas,costo) {
         this.id = id,
         this.nombre = nombre,
         this.cobertura = cobertura,
+        this.caracteristicas = caracteristicas,
         this.costo = costo
         
     }
@@ -19,6 +20,9 @@ class Plan {
     devolverCobertura() {
         return this.cobertura
     }
+    devolverCaracteristicas(){
+        return this.caracteristicas
+    }
     
 
 }
@@ -30,13 +34,38 @@ class Contrato {
         this.planAsociado = planAsociado
     }
 }
+class Evento{
+    constructor(evento1,evento2,evento3,evento4,evento5){
+        this.evento1 = evento1,
+        this.evento2 = evento2,
+        this.evento3 = evento3,
+        this.evento4 = evento4,
+        this.evento5 = evento5
+    }
+        devolverEventos(tipoPlan){
+            if(tipoPlan === "Full Cobertura"){
+                return [this.evento1,this.evento2,this.evento3,this.evento4,this.evento5]
+            }else if(tipoPlan === "Cobertura SemiFull"){
+                return [this.evento1,this.evento2,this.evento3,this.evento4]
+            }else if(tipoPlan === "Cobertura Intermedia"){
+                return [this.evento1,this.evento2,this.evento3]
+            }else if(tipoPlan === "Cobertura Basica"){
+                return [this.evento1,this.evento2]
+            }else{
+                return this.evento1
+            }
+
+        }
+    
+}
 //Variables
 const carteraPlanes = []
 const contratos = []
-const plan1 = new Plan(1,"Plan Premium Full", "Full Cobertura",15000)
-const plan2 = new Plan(2,"Plan Premium Semi", "Cobertura SemiFull", 9000)
-const plan3 = new Plan(3,"Plan Basico Full", "Cobertura Basica", 6000)
-const plan4 = new Plan(4,"Plan Basico", "Cobertura Basica", 3000)
+const plan1 = new Plan(1,"Plan Premium Full", "Full Cobertura","Contra TODO Evento",15000)
+const plan2 = new Plan(2,"Plan Premium Semi", "Cobertura SemiFull","Contra Casi Todo Evento", 9000)
+const plan3 = new Plan(3,"Plan Intermedio", "Cobertura Intermedia","Contra Algunos Eventos", 6000)
+const plan4 = new Plan(4,"Plan Basico", "Cobertura Basica","Contra varios eventos menos..", 3000)
+let events = new Evento("Choques","Caidas","Mordedura","Explosion","Evacuacion")
 carteraPlanes.push(plan1, plan2, plan3,plan4)
 
 
@@ -57,6 +86,7 @@ function planesDisponibles() {
             <h4><strong>${carteraPlanes.nombre}</strong></h4>
             <p class="text-faded mb-0"><strong>Cobertura: ${carteraPlanes.cobertura}</strong></p>
             <p class="text-faded mb-0"><strong>Costo: ${carteraPlanes.costo}<strong></p>
+            <p class="text-faded mb-0"><strong>Caracteristicas: ${carteraPlanes.caracteristicas}<strong></p>
             <button type="button" class="btn btn-primary btn-lg" id="${carteraPlanes.id}">Ver Detalle</button>
     </div>`
         divSeleccion.appendChild(mostrarPlanes)
@@ -65,10 +95,10 @@ function planesDisponibles() {
     })
 }
 function verDetallePlan(evt){
-    console.log(evt)
+    
     let id = evt.target.id
     let plan = carteraPlanes.find(function (element){
-        console.log(element,id)
+        
         return element.mostrarId() === parseInt(id)
         
     })
@@ -76,7 +106,9 @@ function verDetallePlan(evt){
     Swal.fire({
         title: `${plan.cobertura}`,
         icon: `info`,
-        text: `Sueldo Sugerido: ${sueldoSugerido}`
+        html: `<h4>Cobertura Contra:<h4>
+                <p>${events.devolverEventos(plan.cobertura)}<p>
+                <p>Sueldo Sugerido: ${sueldoSugerido}<p>`
               
         
     })
