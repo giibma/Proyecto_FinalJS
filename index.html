@@ -26,11 +26,11 @@
     <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
     <nav id="sidebar-wrapper">
         <ul class="sidebar-nav">
-            <li class="sidebar-brand"><a href="#page-top">Start Bootstrap</a></li>
+            <li class="sidebar-brand"><a href="#page-top">Bienvenidos</a></li>
             <li class="sidebar-nav-item"><a href="#page-top">Home</a></li>
             <li class="sidebar-nav-item"><a href="#planes">Nuestros Planes</a></li>
             <li class="sidebar-nav-item"><a href="#buscaTuPlan">Busca tu Plan</a></li>
-
+            <li class="sidebar-nav-item"><a href="#verContratos">Ver Contratos</a></li>
         </ul>
     </nav>
     <!-- Header Intro-->
@@ -47,20 +47,31 @@
             <div class="content-section-heading">
                 <h3 class="text-secondary mb-0">QUE OFRECEMOS?</h3>
                 <h2 class="mb-5">NUESTROS PLANES</h2>
-                <button type="button" class="btn btn-primary btn-lg" id="cargarPlanes">Ver Planes</button>
+                <button type="button" class="btn btn-secondary btn-lg" id="cargarPlanes">Ver Planes</button>
             </div>
             <br>
             <div class="row gx-4 gx-lg-5" id="mostrarPlanes"></div>
 
         </div>
     </section>
-    <!-- Call to Action-->
+    <!--Seccion Ver Planes Disponibles-->
     <section class="content-section bg-info text-white" id="buscaTuPlan">
         <div class="container px-4 px-lg-5 text-center">
             <h2 class="mb-4">Busquemos tu PLAN!</h2>
             <input type="number" id="inputSueldo" class="form-control" placeholder="INGRESA TU SUELDO MENSUAL" />
             <br>
             <div class="row gx-4 gx-lg-5" id="mostrarOpciones"></div>
+
+        </div>
+        <div class="container px-4 px-lg-5 text-center" id="crearContratoPlan"></div>
+    </section>
+    <!--Seccion Ver Contratos-->
+    <section class="content-section bg-primary text-white" id="verContratos">
+        <div class="container px-4 px-lg-5 text-center">
+            <h2 class="mb-4">Ver Contratos Activos</h2>
+            <button type="button" class="btn btn-secondary btn-lg" id="cargarContratos">Ver Contratos Actuales</button>
+            <br>
+            <div class="row gx-4 gx-lg-5" id="mostrarContratos"></div>
 
         </div>
 
