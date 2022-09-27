@@ -140,6 +140,7 @@ function verOpcionesPlanes() {
             let btnContrato = document.getElementById(`${carteraPlanes.id}`)
             btnContrato.addEventListener("click", formCrearContrato)
             
+             
         } 
         else if (prima < carteraPlanes.costo) 
         {
