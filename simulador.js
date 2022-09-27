@@ -125,7 +125,8 @@ function verOpcionesPlanes() {
     let divSeleccion = document.getElementById("mostrarOpciones")
     divSeleccion.innerHTML = ""
     carteraPlanes.forEach((carteraPlanes) => {
-        if (prima >= carteraPlanes.costo) {
+        if (prima >= carteraPlanes.costo)
+         {
             let mostrarPlan = document.createElement("div")
             mostrarPlan.className = "col-lg-3 col-md-6 mb-5 mb-lg-0"
             mostrarPlan.innerHTML = `
@@ -138,7 +139,10 @@ function verOpcionesPlanes() {
             divSeleccion.appendChild(mostrarPlan)
             let btnContrato = document.getElementById(`${carteraPlanes.id}`)
             btnContrato.addEventListener("click", formCrearContrato)
-        } else if (prima < carteraPlanes.costo) {
+            
+        } 
+        else if (prima < carteraPlanes.costo) 
+        {
             let mostrarPlan = document.createElement("div")
             mostrarPlan.className = "col-lg-3 col-md-6 mb-5 mb-lg-0"
             mostrarPlan.innerHTML = `
@@ -174,11 +178,11 @@ function formCrearContrato(evt) {
                         <input type="text" class="form-control" id="nombre" placeholder="Nombre Completo">
                     </div>
                     <div class="mb-3">
-                        <label for="formularioCreacionContrato" class="form-label">Another label</label>
+                        <label for="formularioCreacionContrato" class="form-label">Ingresa tu Edad</label>
                         <input type="text" class="form-control" id="edad" placeholder="Ingresa tu Edad">
                     </div>
                     <div class="mb-3">
-                        <label for="formularioCreacionContrato" class="form-label">Another label</label>
+                        <label for="formularioCreacionContrato" class="form-label">Ingresa tu telefono</label>
                         <input type="text" class="form-control" id="telefono" placeholder="Ingresa tu Telefono">
                         
                     </div>
