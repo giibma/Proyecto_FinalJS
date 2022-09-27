@@ -240,23 +240,6 @@ function mostrarContratos() {
 
 }
 
-function eliminarContrato(contr) {
-
-    if (contr.length == 0) {
-        alert("No Existen Contratos para Eliminar")
-    }
-    else {
-        let buscar = parseInt(prompt("Ingresa el Numero de Contrato que deseas Eliminar"))
-        contratos.forEach(function (cont, index, obj) {
-            if (cont.idAfiliado === buscar) {
-                obj.splice(index, 1)
-                alert(`Se ha Eliminado el contrato ${cont.idAfiliado} para el cliente: ${cont.nombreAfiliado}`)
-            }
-        })
-    }
-
-
-}
 
 //Creaciones HTML Menu
 let cargaPlanes = document.getElementById("cargarPlanes")
