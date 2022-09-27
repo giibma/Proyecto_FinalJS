@@ -210,6 +210,10 @@ function crearContrato() {
     })
     let reset = document.getElementById("crearContratoPlan")
     reset.innerHTML=""
+    let resetInput= document.getElementById("inputSueldo")
+    resetInput.value=""
+    let resetFrm = document.getElementById("mostrarOpciones")
+    resetFrm.innerHTML = ""
 }
 
 function mostrarContratos() {
@@ -237,6 +241,7 @@ function mostrarContratos() {
             
             </div>`
             divMostrarPlanes.appendChild(dvMostrar)
+
         }
     })
      
