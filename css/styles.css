@@ -2374,7 +2374,7 @@ progress {
   padding: 0.5rem 1rem;
   margin: -0.5rem -1rem;
   -webkit-margin-end: 1rem;
-  margin-inline-end: 1rem;
+          margin-inline-end: 1rem;
 }
 
 textarea.form-control {
@@ -11569,8 +11569,4 @@ footer.footer .social-link:hover {
   line-height: 7.5rem;
   font-size: 2.25rem;
   box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.1);
-}
-#logo{
-  height: 50px;
-  width: 50px;
 }
