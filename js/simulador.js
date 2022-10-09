@@ -62,16 +62,6 @@ class Evento {
 
 }
 //Variables
-/*
-let contratos = []
-
-carteraPlanes.push(plan1, plan2, plan3, plan4)
-
-
-fetch("./datos.json")
-.then((res)=> res.json())
-.then((data)=>{console.log(data)})
-*/
 //Carga de Planes desde json
 let events = new Evento("Choques", "Caidas", "Mordedura", "Explosion", "Evacuacion")
 const cargarPlanes = async () => {
@@ -91,12 +81,13 @@ if (localStorage.getItem("carteraPlanes")) {
     localStorage.setItem("carteraPlanes",carteraPlanes)
 }
 //Carga de Contratos desde Json
+let listaContratos = []
 const cargarContratos = async()=>{
     const respuesta = await fetch("./contratos.json")
     const contratos = await respuesta.json()
     for(let contrato of contratos){
         let nuevoContrato = new Contrato(contrato.id,contrato.rut,contrato.nombre,contrato.edad,contrato.telefono,contrato.planAsociado)
-        contratosRealizados.push(nuevoContrato)
+        listaContratos.push(nuevoContrato)
     }
 }
 cargarContratos()
@@ -262,15 +253,24 @@ function crearContrato() {
     resetInput.value = ""
     let resetFrm = document.getElementById("mostrarOpciones")
     resetFrm.innerHTML = ""
+    mostrarContratos()
 }
 
 // muestra todos los contratos ya creados.
 
 function mostrarContratos() {
     let divMostrarPlanes = document.getElementById("mostrarContratos")
-    divMostrarPlanes.innerHTML = ""
-    contratosRealizados.forEach((contra) => {
-        if (contratosRealizados.length <= 0) {
+    divMostrarPlanes.innerHTML=""
+    totalContratos(listaContratos,divMostrarPlanes)
+    totalContratos(contratosRealizados,divMostrarPlanes)
+
+
+}
+function totalContratos(totalContratos,divMostrarPlanes){
+    
+    
+    totalContratos.forEach((contra) => {
+        if (totalContratos.length <= 0) {
             Swal.fire({
                 title: `UPS`,
                 icon: `info`,
@@ -294,11 +294,7 @@ function mostrarContratos() {
 
         }
     })
-
-
-
 }
-
 
 //Seccion HTML index
 let cargaPlanes = document.getElementById("cargarPlanes")
