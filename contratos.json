@@ -1,0 +1,34 @@
+[
+    {
+        "id":1,
+        "rut":"17894561-2",
+        "nombre":"Jill Valentine",
+        "edad":23,
+        "telefono":911,
+        "planAsociado":"Full Cobertura"
+    },
+    {
+        "id":2,
+        "rut":"17894561-3",
+        "nombre":"Albert Wesker",
+        "edad":38,
+        "telefono":911,
+        "planAsociado":"Full Cobertura"
+    },
+    {
+        "id":3,
+        "rut":"17894561-4",
+        "nombre":"Leon Scott Kennedy",
+        "edad":21,
+        "telefono":911,
+        "planAsociado":"Full Cobertura"
+    },
+    {
+        "id":4,
+        "rut":"17894561-5",
+        "nombre":"Claire Redfield",
+        "edad":19,
+        "telefono":911,
+        "planAsociado":"Full Cobertura"
+    }
+]

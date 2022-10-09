@@ -28,8 +28,10 @@ class Plan {
 }
 
 class Contrato {
-    constructor(nombre, edad, telefono, planAsociado) {
-        this.nombre = nombre,
+    constructor(id, rut, nombre, edad, telefono, planAsociado) {
+        this.id = id,
+            this.rut = rut,
+            this.nombre = nombre,
             this.edad = edad,
             this.telefono = telefono,
             this.planAsociado = planAsociado
@@ -46,7 +48,7 @@ class Evento {
     devolverEventos(tipoPlan) {
         if (tipoPlan === "Full Cobertura") {
             return [this.evento1, this.evento2, this.evento3, this.evento4, this.evento5]
-        } else if (tipoPlan === "Cobertura SemiFull") {
+        } else if (tipoPlan === "Cobertura Semi Full") {
             return [this.evento1, this.evento2, this.evento3, this.evento4]
         } else if (tipoPlan === "Cobertura Intermedia") {
             return [this.evento1, this.evento2, this.evento3]
@@ -60,27 +62,57 @@ class Evento {
 
 }
 //Variables
+/*
 let contratos = []
-const carteraPlanes = []
-const plan1 = new Plan(1, "Plan Premium Full", "Full Cobertura", "Contra TODO Evento", 15000)
-const plan2 = new Plan(2, "Plan Premium Semi", "Cobertura SemiFull", "Contra Casi Todo Evento", 9000)
-const plan3 = new Plan(3, "Plan Intermedio", "Cobertura Intermedia", "Contra Algunos Eventos", 6000)
-const plan4 = new Plan(4, "Plan Basico", "Cobertura Basica", "Contra varios eventos menos..", 3000)
-let events = new Evento("Choques", "Caidas", "Mordedura", "Explosion", "Evacuacion")
+
 carteraPlanes.push(plan1, plan2, plan3, plan4)
-if(localStorage.getItem("contratos")){
-    contratos = JSON.parse(localStorage.getItem("contratos"))
-}else{
- 
-    let contrato1 = new Contrato("wesker","30","123","Plan Premium Full")
-    contratos.push(contrato1)
-    localStorage.setItem("contratos",JSON.stringify(contratos))
+
+
+fetch("./datos.json")
+.then((res)=> res.json())
+.then((data)=>{console.log(data)})
+*/
+//Carga de Planes desde json
+let events = new Evento("Choques", "Caidas", "Mordedura", "Explosion", "Evacuacion")
+const cargarPlanes = async () => {
+    const respuesta = await fetch("./planes.json")
+    const datos = await respuesta.json()
+    console.log(datos)
+    for (let plan of datos) {
+        let nuevoPlan = new Plan(plan.id, plan.nombre, plan.cobertura, plan.caracteristicas, plan.costo)
+        carteraPlanes.push(nuevoPlan)
+    }
 }
-localStorage.setItem("contratos",JSON.stringify(contratos))
+cargarPlanes()
+let carteraPlanes = []
+if (localStorage.getItem("carteraPlanes")) {
+    carteraPlanes = JSON.parse(localStorage.getItem("carteraPlanes"))
+} else {
+    localStorage.setItem("carteraPlanes",carteraPlanes)
+}
+//Carga de Contratos desde Json
+const cargarContratos = async()=>{
+    const respuesta = await fetch("./contratos.json")
+    const contratos = await respuesta.json()
+    for(let contrato of contratos){
+        let nuevoContrato = new Contrato(contrato.id,contrato.rut,contrato.nombre,contrato.edad,contrato.telefono,contrato.planAsociado)
+        contratosRealizados.push(nuevoContrato)
+    }
+}
+cargarContratos()
+let contratosRealizados = []
+if (localStorage.getItem("contratosRealizados")) {
+    contratosRealizados = JSON.parse(localStorage.getItem("contratosRealizados"))
+    
+} else {
+    contratosRealizados=[]
+    localStorage.setItem("contratosRealizados",contratosRealizados)
+}
+
 
 //------------------------------------------------------------------------------
 //Funciones
-function planesDisponibles() {
+const planesDisponibles = async()=> {
     let divSeleccion = document.getElementById("mostrarPlanes")
     divSeleccion.innerHTML = ""
     carteraPlanes.forEach((carteraPlanes) => {
@@ -96,7 +128,9 @@ function planesDisponibles() {
     </div>`
         divSeleccion.appendChild(mostrarPlanes)
         let btnDetalle = document.getElementById(`${carteraPlanes.id}`)
-        btnDetalle.addEventListener("click", verDetallePlan)
+        btnDetalle.addEventListener("click", verDetallePlan) 
+        
+        
     })
 }
 function verDetallePlan(evt) {
@@ -107,7 +141,8 @@ function verDetallePlan(evt) {
         return element.mostrarId() === parseInt(id)
 
     })
-    let sueldoSugerido = Math.round(((plan.devolverCosto() * 100) / 0.07) / 100)
+    let sueldoSugerido = Math.round((plan.costo / 0.07)+1)
+    
     Swal.fire({
         title: `${plan.cobertura}`,
         icon: `info`,
@@ -117,16 +152,19 @@ function verDetallePlan(evt) {
 
 
     })
-
+    let divSeleccion = document.getElementById("mostrarPlanes")
+    divSeleccion.innerHTML = ""
 }
-function verOpcionesPlanes() {
+//Funcion para controlar mediante el evento change las opciones de planes segun el sueldo ingresado.
+
+const verOpcionesPlanes = async()=> {
     let sueldo = document.getElementById("inputSueldo").value
     let prima = sueldo * 0.07
+    console.log(prima)
     let divSeleccion = document.getElementById("mostrarOpciones")
     divSeleccion.innerHTML = ""
     carteraPlanes.forEach((carteraPlanes) => {
-        if (prima >= carteraPlanes.costo)
-         {
+        if (prima >= carteraPlanes.costo) {
             let mostrarPlan = document.createElement("div")
             mostrarPlan.className = "col-lg-3 col-md-6 mb-5 mb-lg-0"
             mostrarPlan.innerHTML = `
@@ -140,9 +178,10 @@ function verOpcionesPlanes() {
             let btnContrato = document.getElementById(`${carteraPlanes.id}`)
             btnContrato.addEventListener("click", formCrearContrato)
             
-        } 
-        else if (prima < carteraPlanes.costo) 
-        {
+
+
+        }
+        else if (prima < carteraPlanes.costo) {
             let mostrarPlan = document.createElement("div")
             mostrarPlan.className = "col-lg-3 col-md-6 mb-5 mb-lg-0"
             mostrarPlan.innerHTML = `
@@ -159,6 +198,7 @@ function verOpcionesPlanes() {
 
 }
 
+//funcion para crear el formulario para contratar un plan segun la opcion que tengas.
 function formCrearContrato(evt) {
 
     let id = evt.target.id
@@ -175,7 +215,11 @@ function formCrearContrato(evt) {
                         <h1 id="nombrePlan">${plan.nombre}</h1>
                         <br>   
                         <label for="formularioCreacionContrato" class="form-label">Ingresa tu Nombre</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Nombre Completo">
+                        <input type="text" class="form-control" id="rut" placeholder="Ingresa tu Rut o DNI">
+                    </div>
+                    <div class="mb-3">
+                        <label for="formularioCreacionContrato" class="form-label">Ingresa tu Edad</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu Nombre Completo">
                     </div>
                     <div class="mb-3">
                         <label for="formularioCreacionContrato" class="form-label">Ingresa tu Edad</label>
@@ -193,46 +237,52 @@ function formCrearContrato(evt) {
     divForm.appendChild(div)
     let btnContratar = document.getElementById("contratarPlan")
     btnContratar.addEventListener("click", crearContrato)
-    
+   
+
+
 }
+//funcion para crear un contrato exitoso
 function crearContrato() {
+    let rut = document.getElementById("rut").value
     let nombre = document.getElementById("nombre").value
     let edad = document.getElementById("edad").value
     let telefono = document.getElementById("telefono").value
     let plan = document.getElementById("nombrePlan").innerText
-    let contratoCreado = new Contrato(nombre, edad, telefono, plan)
+    let contratoCreado = new Contrato(contratosRealizados.length+1,rut,nombre, edad, telefono, plan)
     console.log(contratoCreado)
-    contratos.push(contratoCreado)
-    localStorage.setItem("contratos", JSON.stringify(contratos))
+    contratosRealizados.push(contratoCreado)
+    localStorage.setItem("contratosRealizados", JSON.stringify(contratosRealizados))
     Swal.fire({
-        title:`FELICIDADES!`,
-        text:`Has Contratado el ${plan} `
+        title: `FELICIDADES!`,
+        text: `Has Contratado el ${plan} `
     })
     let reset = document.getElementById("crearContratoPlan")
-    reset.innerHTML=""
-    let resetInput= document.getElementById("inputSueldo")
-    resetInput.value=""
+    reset.innerHTML = ""
+    let resetInput = document.getElementById("inputSueldo")
+    resetInput.value = ""
     let resetFrm = document.getElementById("mostrarOpciones")
     resetFrm.innerHTML = ""
 }
 
+// muestra todos los contratos ya creados.
+
 function mostrarContratos() {
     let divMostrarPlanes = document.getElementById("mostrarContratos")
     divMostrarPlanes.innerHTML = ""
-    contratos.forEach((contra)=>{
-        if(contratos.length <= 0){
+    contratosRealizados.forEach((contra) => {
+        if (contratosRealizados.length <= 0) {
             Swal.fire({
                 title: `UPS`,
                 icon: `info`,
                 html: `<h1>No Existen Contratos Aun</h1>`
-        
-        
+
+
             })
 
-        }else{
+        } else {
             dvMostrar = document.createElement("div")
-            dvMostrar.className="col-lg-3 col-md-6 mb-5 mb-lg-0"
-            dvMostrar.innerHTML=`<br>
+            dvMostrar.className = "col-lg-3 col-md-6 mb-5 mb-lg-0"
+            dvMostrar.innerHTML = `<br>
             <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
             <h4><strong>Contrato de: ${contra.nombre}</strong></h4>
             <p class="text-faded mb-0"><strong>Edad: ${contra.edad}</strong></p>
@@ -244,13 +294,13 @@ function mostrarContratos() {
 
         }
     })
-     
-        
+
+
 
 }
 
 
-//Creaciones HTML Menu
+//Seccion HTML index
 let cargaPlanes = document.getElementById("cargarPlanes")
 cargaPlanes.addEventListener("click", planesDisponibles)
 let verOpciones = document.getElementById("inputSueldo")
