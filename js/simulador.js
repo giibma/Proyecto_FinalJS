@@ -1,4 +1,3 @@
-<<<<<<< HEAD:js/simulador.js
 //Objetos necesarios
 class Plan {
     constructor(id, nombre, cobertura, caracteristicas, costo) {
@@ -258,7 +257,7 @@ let verOpciones = document.getElementById("inputSueldo")
 verOpciones.addEventListener("change", verOpcionesPlanes)
 let btnMostrarContratos = document.getElementById("cargarContratos")
 btnMostrarContratos.addEventListener("click", mostrarContratos)
-=======
+
 //Objetos necesarios
 class Plan {
     constructor(id, nombre, cobertura, caracteristicas, costo) {
