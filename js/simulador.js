@@ -36,6 +36,9 @@ class Contrato {
             this.telefono = telefono,
             this.planAsociado = planAsociado
     }
+    devolverId() {
+        return this.id
+    }
 }
 class Evento {
     constructor(evento1, evento2, evento3, evento4, evento5) {
@@ -78,32 +81,22 @@ let carteraPlanes = []
 if (localStorage.getItem("carteraPlanes")) {
     carteraPlanes = JSON.parse(localStorage.getItem("carteraPlanes"))
 } else {
-    localStorage.setItem("carteraPlanes",carteraPlanes)
+    localStorage.setItem("carteraPlanes", carteraPlanes)
 }
-//Carga de Contratos desde Json
-let listaContratos = []
-const cargarContratos = async()=>{
-    const respuesta = await fetch("./contratos.json")
-    const contratos = await respuesta.json()
-    for(let contrato of contratos){
-        let nuevoContrato = new Contrato(contrato.id,contrato.rut,contrato.nombre,contrato.edad,contrato.telefono,contrato.planAsociado)
-        listaContratos.push(nuevoContrato)
-    }
-}
-cargarContratos()
+//Validacion Storage
 let contratosRealizados = []
 if (localStorage.getItem("contratosRealizados")) {
     contratosRealizados = JSON.parse(localStorage.getItem("contratosRealizados"))
-    
+
 } else {
-    contratosRealizados=[]
-    localStorage.setItem("contratosRealizados",contratosRealizados)
+    contratosRealizados = []
+    localStorage.setItem("contratosRealizados", contratosRealizados)
 }
 
 
 //------------------------------------------------------------------------------
 //Funciones
-const planesDisponibles = async()=> {
+const planesDisponibles = async () => {
     let divSeleccion = document.getElementById("mostrarPlanes")
     divSeleccion.innerHTML = ""
     carteraPlanes.forEach((carteraPlanes) => {
@@ -119,9 +112,9 @@ const planesDisponibles = async()=> {
     </div>`
         divSeleccion.appendChild(mostrarPlanes)
         let btnDetalle = document.getElementById(`${carteraPlanes.id}`)
-        btnDetalle.addEventListener("click", verDetallePlan) 
-        
-        
+        btnDetalle.addEventListener("click", verDetallePlan)
+
+
     })
 }
 function verDetallePlan(evt) {
@@ -132,8 +125,8 @@ function verDetallePlan(evt) {
         return element.mostrarId() === parseInt(id)
 
     })
-    let sueldoSugerido = Math.round((plan.costo / 0.07)+1)
-    
+    let sueldoSugerido = Math.round((plan.costo / 0.07) + 1)
+
     Swal.fire({
         title: `${plan.cobertura}`,
         icon: `info`,
@@ -148,7 +141,7 @@ function verDetallePlan(evt) {
 }
 //Funcion para controlar mediante el evento change las opciones de planes segun el sueldo ingresado.
 
-const verOpcionesPlanes = async()=> {
+const verOpcionesPlanes = async () => {
     let sueldo = document.getElementById("inputSueldo").value
     let prima = sueldo * 0.07
     console.log(prima)
@@ -168,7 +161,7 @@ const verOpcionesPlanes = async()=> {
             divSeleccion.appendChild(mostrarPlan)
             let btnContrato = document.getElementById(`${carteraPlanes.id}`)
             btnContrato.addEventListener("click", formCrearContrato)
-            
+
 
 
         }
@@ -228,7 +221,7 @@ function formCrearContrato(evt) {
     divForm.appendChild(div)
     let btnContratar = document.getElementById("contratarPlan")
     btnContratar.addEventListener("click", crearContrato)
-   
+
 
 
 }
@@ -239,7 +232,7 @@ function crearContrato() {
     let edad = document.getElementById("edad").value
     let telefono = document.getElementById("telefono").value
     let plan = document.getElementById("nombrePlan").innerText
-    let contratoCreado = new Contrato(contratosRealizados.length+1,rut,nombre, edad, telefono, plan)
+    let contratoCreado = new Contrato(contratosRealizados.length + 1, rut, nombre, edad, telefono, plan)
     console.log(contratoCreado)
     contratosRealizados.push(contratoCreado)
     localStorage.setItem("contratosRealizados", JSON.stringify(contratosRealizados))
@@ -258,42 +251,51 @@ function crearContrato() {
 
 // muestra todos los contratos ya creados.
 
-function mostrarContratos() {
-    let divMostrarPlanes = document.getElementById("mostrarContratos")
-    divMostrarPlanes.innerHTML=""
-    totalContratos(listaContratos,divMostrarPlanes)
-    totalContratos(contratosRealizados,divMostrarPlanes)
+const mostrarContratos = async () => {
+    let divMostrar = document.getElementById("mostrarContratos")
 
-
+    if (contratosRealizados.length > 0) {
+        divMostrar.innerHTML = ""
+        contratosRealizados.forEach((contra) => {
+            if (contratosRealizados.length > 0) {
+                let dvMostrar = document.createElement("div")
+                dvMostrar.className = "col-lg-3 col-md-6 mb-5 mb-lg-0"
+                dvMostrar.innerHTML = `<br>
+        <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
+        <h4><strong>Contrato de: ${contra.nombre}</strong></h4>
+        <p class="text-faded mb-0"><strong>Edad: ${contra.edad}</strong></p>
+        <p class="text-faded mb-0"><strong>Telefono: ${contra.telefono}<strong></p>
+        <p class="text-faded mb-0"><strong>PLAN CONTRATADO: ${contra.planAsociado}<strong></p>
+        <button type="button" class="btn btn-secondary btn-lg" id="${contra.id}">Eliminar Plan</button>
+        </div>`
+                divMostrar.appendChild(dvMostrar)
+                let btnEliminar = document.getElementById(`${contra.id}`)
+                btnEliminar.addEventListener("click", eliminarContrato)
+            } else if (contratosRealizados.length < 0) {
+                console.log("no hay contratos")
+            }
+        })
+    }else{
+        divMostrar.innerHTML = ""
+        Swal.fire({
+            title: `UPS!`,
+            text: `No Existen Planes Contratados, Prueba Contratar Uno!`
+        })
+    }
 }
-function totalContratos(totalContratos,divMostrarPlanes){
-    
-    
-    totalContratos.forEach((contra) => {
-        if (totalContratos.length <= 0) {
-            Swal.fire({
-                title: `UPS`,
-                icon: `info`,
-                html: `<h1>No Existen Contratos Aun</h1>`
 
-
-            })
-
-        } else {
-            dvMostrar = document.createElement("div")
-            dvMostrar.className = "col-lg-3 col-md-6 mb-5 mb-lg-0"
-            dvMostrar.innerHTML = `<br>
-            <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
-            <h4><strong>Contrato de: ${contra.nombre}</strong></h4>
-            <p class="text-faded mb-0"><strong>Edad: ${contra.edad}</strong></p>
-            <p class="text-faded mb-0"><strong>Telefono: ${contra.telefono}<strong></p>
-            <p class="text-faded mb-0"><strong>PLAN CONTRATADO: ${contra.planAsociado}<strong></p>
-            
-            </div>`
-            divMostrarPlanes.appendChild(dvMostrar)
-
-        }
-    })
+function eliminarContrato(evt) {
+    let idBoton = evt.target.id
+    console.log(idBoton)
+    let contratosStorage = JSON.parse(localStorage.getItem("contratosRealizados"))
+    console.log(contratosStorage)
+    let contratosArray = contratosStorage.findIndex(element => element.id == idBoton)
+    console.log(contratosArray)
+    contratosStorage.splice(contratosArray, 1)
+    contratosRealizados.splice(contratosArray, 1)
+    let contratosJson = JSON.stringify(contratosStorage)
+    localStorage.setItem("contratosRealizados", contratosJson)
+    mostrarContratos()
 }
 
 //Seccion HTML index
