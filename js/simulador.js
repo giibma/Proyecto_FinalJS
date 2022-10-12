@@ -195,11 +195,13 @@ function formCrearContrato(evt) {
     divForm.innerHTML = ""
     let div = document.createElement("div")
     div.className = `<div class="mb-3">`
-    div.innerHTML = `   <br>
+    div.innerHTML = `                     
+                        <br>
                         <h1 id="nombrePlan">${plan.nombre}</h1>
                         <br>   
                         <label for="formularioCreacionContrato" class="form-label">Ingresa tu Nombre</label>
                         <input type="text" class="form-control" id="rut" placeholder="Ingresa tu Rut o DNI">
+                        
                     </div>
                     <div class="mb-3">
                         <label for="formularioCreacionContrato" class="form-label">Ingresa tu Edad</label>
@@ -208,21 +210,43 @@ function formCrearContrato(evt) {
                     <div class="mb-3">
                         <label for="formularioCreacionContrato" class="form-label">Ingresa tu Edad</label>
                         <input type="text" class="form-control" id="edad" placeholder="Ingresa tu Edad">
+                        <label class="form-label" id="validaEdad"></label>
                     </div>
                     <div class="mb-3">
                         <label for="formularioCreacionContrato" class="form-label">Ingresa tu telefono</label>
                         <input type="text" class="form-control" id="telefono" placeholder="Ingresa tu Telefono">
                         
                     </div>
-                    <div class="mb-3">
-                        <button type="button" class="btn btn-primary btn-lg" id="contratarPlan">Contratar Plan!</button>
-                    </div>
+                    <div class="mb-3" id="areaBoton"><button type="button" class="btn btn-primary btn-lg" id="contratarPlan" disabled>Contratar Plan!</button></div>
+                    </form>
                    `
     divForm.appendChild(div)
-    let btnContratar = document.getElementById("contratarPlan")
-    btnContratar.addEventListener("click", crearContrato)
+    let edad = document.getElementById("edad")
+    edad.addEventListener("change", validarEdad)
 
+}
 
+//Funcion validar edad para contratar plan
+function validarEdad() {
+    let div = document.getElementById("crearContratoPlan")
+    let edad = document.getElementById("edad").value
+    let crearBtn = document.getElementById("areaBoton")
+    console.log(edad)
+    if (edad >= 18) {
+        crearBtn.innerHTML = ``
+        crearBtn.innerHTML = `<button type="button" class="btn btn-primary btn-lg" id="contratarPlan">Contratar Plan!</button></div>`
+        let mensaje = document.getElementById("validaEdad")
+        mensaje.innerText=""
+        div.appendChild(crearBtn)
+        let btnContratar = document.getElementById("contratarPlan")
+        btnContratar.addEventListener("click", crearContrato)
+    } else if (edad < 18) {
+        crearBtn.innerHTML = ``
+        crearBtn.innerHTML = `<button type="button" class="btn btn-primary btn-lg" id="contratarPlan" disabled>Contratar Plan!</button></div>`
+        let mensaje = document.getElementById("validaEdad")
+        mensaje.innerText="Debes tener mas de 18 años para contratar un plan"
+        div.appendChild(crearBtn)
+    }
 
 }
 //funcion para crear un contrato exitoso
