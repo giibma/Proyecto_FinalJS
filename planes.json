@@ -3,28 +3,28 @@
         "id":1,
         "nombre": "Plan Premium Full", 
         "cobertura":"Full Cobertura", 
-        "caracteristicas":"Contra TODO Evento",
+        "caracteristicas":["Infeccion","Mordedura","Caidas","Choques","Evacuacion"],
         "costo":15000
     },
     {
         "id":2,
         "nombre": "Plan Premium Semi", 
         "cobertura":"Cobertura Semi Full", 
-        "caracteristicas":"Contra CASI Todo Evento",
+        "caracteristicas":["Infeccion","Mordedura","Caida","Choques"],
         "costo":9000
     },
     {
         "id":3,
         "nombre": "Plan Intermedio", 
         "cobertura":"Cobertura Intermedia", 
-        "caracteristicas":"Contra TODO Evento",
+        "caracteristicas":["Caidas","Mordedura","choques"],
         "costo":6000
     },
     {
         "id":4,
         "nombre": "Plan Basico", 
         "cobertura":"Cobertura Basica", 
-        "caracteristicas":"Contra Solo 1 Evento",
+        "caracteristicas":["Choque","Caidas"],
         "costo":3000
     }
 ]

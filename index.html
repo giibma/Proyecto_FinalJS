@@ -29,6 +29,7 @@
             <li class="sidebar-brand"><a href="#page-top">Bienvenidos</a></li>
             <li class="sidebar-nav-item"><a href="#page-top">Home</a></li>
             <li class="sidebar-nav-item"><a href="#planes">Nuestros Planes</a></li>
+            <li class="sidebar-nav-item"><a href="#creaPlan">Arma tu Plan</a></li>
             <li class="sidebar-nav-item"><a href="#buscaTuPlan">Busca tu Plan</a></li>
             <li class="sidebar-nav-item"><a href="#verContratos">Ver Contratos</a></li>
         </ul>
@@ -38,15 +39,28 @@
         <div class="container px-4 px-lg-5 text-center">
             <h1 class="mb-1">ISAPRE ZOMMEDICS</h1>
             <h3 class="mb-5"><em>una division de Farmaceutica UMBRELLA<img id="logo" src="./assets/img/umbrella.jpg"></em></h3>
-            <a class="btn btn-primary btn-xl" href="#planes">VER MAS</a>
+            <a class="btn btn-primary btn-xl" href="#creaPlan">VER MAS</a>
         </div>
     </header>
-    <!-- Seccion Vista Planes-->
-    <section class="content-section bg-primary text-white text-center" id="planes">
+    
+    <!-- Seccion Crear Planes-->
+    <section class="content-section bg-primary text-white text-center" id="creaPlan">
         <div class="container px-4 px-lg-5">
             <div class="content-section-heading">
-                <h3 class="text-secondary mb-0">QUE OFRECEMOS?</h3>
-                <h2 class="mb-5">NUESTROS PLANES</h2>
+                <h2 class="mb-5">ARMA TU PLAN</h2>
+                <button type="button" class="btn btn-secondary btn-lg" id="mostrarMenuCreacion">Crea tu Plan</button>
+            </div>
+            <br>
+            <div class="row gx-4 gx-lg-5" id="crearPlanes"></div>
+
+        </div>
+    </section>
+
+    <!-- Seccion vista Planes-->
+    <section class="content-section bg-info text-white text-center" id="planes">
+        <div class="container px-4 px-lg-5">
+            <div class="content-section-heading">
+                <h2 class="text-primary">QUE OFRECEMOS?</h2>
                 <button type="button" class="btn btn-secondary btn-lg" id="cargarPlanes">Ver Planes</button>
             </div>
             <br>
@@ -54,8 +68,9 @@
 
         </div>
     </section>
+
     <!--Seccion Ver Planes Disponibles-->
-    <section class="content-section bg-info text-white" id="buscaTuPlan">
+    <section class="content-section bg-primary text-white" id="buscaTuPlan">
         <div class="container px-4 px-lg-5 text-center">
             <h2 class="mb-4">Busquemos tu PLAN!</h2>
             <input type="number" id="inputSueldo" class="form-control" placeholder="INGRESA TU SUELDO MENSUAL" />
@@ -66,7 +81,7 @@
         <div class="container px-4 px-lg-5 text-center" id="crearContratoPlan"></div>
     </section>
     <!--Seccion Ver Contratos-->
-    <section class="content-section bg-primary text-white" id="verContratos">
+    <section class="content-section bg-info text-white" id="verContratos">
         <div class="container px-4 px-lg-5 text-center" id="dvContratos">
             <h2 class="mb-4">Ver Contratos Activos</h2>
             <button type="button" class="btn btn-secondary btn-lg" id="cargarContratos">Ver Contratos Actuales</button>
