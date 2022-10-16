@@ -73,9 +73,6 @@ if (localStorage.getItem("contratosRealizados")) {
 
 //------------------------------------------------------------------------------
 //Funciones
-
-
-
 const planesDisponibles = async () => {
     let divSeleccion = document.getElementById("mostrarPlanes")
     divSeleccion.innerHTML = ""
