@@ -308,22 +308,6 @@ function eliminarContrato(evt) {
 
 }
 
-const cargarMenuCreacion = async()=>{
-    
-    divCrearPlan = document.getElementById("crearPlanes")
-    divCrearPlan.innerHTML=""
-    let formulario = document.createElement("div")
-    formulario.className = `<div class="mb-3">`
-    formulario.innerHTML = `<form>
-                            <label>Ingresa Nombre Plan</label>
-                            <input type="text" class="form-control" id="nombrePlan" required/>
-                            <label>
-                            </form></div>`
-    divCrearPlan.appendChild(formulario)
-
-    
-
-}
 
 //Funciones para mostrar y ocultar informacion usando el mismo boton.
 function muestraPlanes() {
@@ -359,5 +343,4 @@ let verOpciones = document.getElementById("inputSueldo")
 verOpciones.addEventListener("change", verOpcionesPlanes)
 let btnMostrarContratos = document.getElementById("cargarContratos")
 btnMostrarContratos.addEventListener("click", muestraContratos)
-let btnMostrarMenuCreacion = document.getElementById("mostrarMenuCreacion")
-btnMostrarMenuCreacion.addEventListener("click", mostrarFormCreacion)
+
