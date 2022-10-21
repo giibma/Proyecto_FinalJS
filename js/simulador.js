@@ -41,6 +41,9 @@ class Contrato {
     devolverId() {
         return this.id
     }
+    devolverNombre(){
+        return this.nombre
+    }
 }
 //Variables
 //Carga de Planes desde json
@@ -80,7 +83,7 @@ const planesDisponibles = async () => {
     carteraPlanes.forEach((carteraPlanes) => {
         let mostrarPlanes = document.createElement("div")
         mostrarPlanes.className = "col-lg-3 col-md-6 mb-5 mb-lg-0"
-        mostrarPlanes.id ="planesDisponibles"
+        mostrarPlanes.id = "planesDisponibles"
         mostrarPlanes.innerHTML = `
             <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
             <h4><strong>${carteraPlanes.nombre}</strong></h4>
@@ -92,12 +95,12 @@ const planesDisponibles = async () => {
         let btnDetalle = document.getElementById(`${carteraPlanes.id}`)
         btnDetalle.addEventListener("click", verDetallePlan)
 
-        
+
     })
 }
 //funcion para obtener el id del boton "verdetalles" y mostrar informacion correspondiente
 async function verDetallePlan(evt) {
-    
+
     let id = evt.target.id
     let plan = carteraPlanes.find(function (element) {
 
@@ -117,7 +120,7 @@ async function verDetallePlan(evt) {
 
 
     })
-    
+
 }
 //Funcion para controlar mediante el evento change las opciones de planes segun el sueldo ingresado.
 const verOpcionesPlanes = async () => {
@@ -129,7 +132,7 @@ const verOpcionesPlanes = async () => {
         if (prima >= carteraPlanes.costo) {
             let mostrarPlan = document.createElement("div")
             mostrarPlan.className = "col-lg-3 col-md-6 mb-5 mb-lg-0"
-            mostrarPlan.id="mostrarOpcionesPlanes"
+            mostrarPlan.id = "mostrarOpcionesPlanes"
             mostrarPlan.innerHTML = `
             <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
             <h4><strong>${carteraPlanes.nombre}</strong></h4>
@@ -175,12 +178,12 @@ async function formCrearContrato(evt) {
                         <br>                  
                         <h1 id="nombrePlan">${plan.nombre}</h1>
                        
-                        <label for="formularioCreacionContrato" class="form-label">Ingresa tu Nombre</label>
+                        <label for="formularioCreacionContrato" class="form-label">Ingresa tu Rut o DNI</label>
                         <input type="text" class="form-control" id="rut" placeholder="Ingresa tu Rut o DNI">
-                        <label class="form-label" id="validaNombre"></label>
+                       
                     </div>
                     <div class="mb-3">
-                        <label for="formularioCreacionContrato" class="form-label">Ingresa tu Edad</label>
+                        <label for="formularioCreacionContrato" class="form-label">Ingresa tu Nombre</label>
                         <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu Nombre Completo">
                     </div>
                     <div class="mb-3">
@@ -235,6 +238,18 @@ function validarEdad() {
     }
 
 }
+//funcion para validar que no exista un rut igual para un contrato
+function validarRut(rut) {
+    let rutStorage = JSON.parse(localStorage.getItem("contratosRealizados"))
+    let arrayRuts = rutStorage.find(element => element.rut == rut)
+    if (arrayRuts != undefined) {
+        return true
+    } else {
+
+        return false
+    }
+
+}
 //funcion para crear un contrato
 function crearContrato() {
     let rut = document.getElementById("rut").value
@@ -242,22 +257,61 @@ function crearContrato() {
     let edad = document.getElementById("edad").value
     let telefono = document.getElementById("telefono").value
     let plan = document.getElementById("nombrePlan").innerText
+
     if ((camposVacios(rut) == true && camposVacios(nombre) == true && camposVacios(telefono) == true)) {
-        let contratoCreado = new Contrato(contratosRealizados.length + 1, rut, nombre, edad, telefono, plan)
-        contratosRealizados.push(contratoCreado)
-        localStorage.setItem("contratosRealizados", JSON.stringify(contratosRealizados))
-        Swal.fire({
-            title: `FELICIDADES!`,
-            text: `Has Contratado el ${plan} `
-        })
-        let reset = document.getElementById("crearContratoPlan")
-        reset.innerHTML = ""
-        let resetInput = document.getElementById("inputSueldo")
-        resetInput.value = ""
-        let resetFrm = document.getElementById("mostrarOpciones")
-        resetFrm.innerHTML = ""
-        mostrarContratos()
-    }else{
+
+        if (validarRut(rut) == false) {
+            let contratoCreado = new Contrato(contratosRealizados.length + 1, rut, nombre, edad, telefono, plan)
+            contratosRealizados.push(contratoCreado)
+            localStorage.setItem("contratosRealizados", JSON.stringify(contratosRealizados))
+            Swal.fire({
+                title: `FELICIDADES!`,
+                text: `Has Contratado el ${plan} `
+            })
+            let reset = document.getElementById("crearContratoPlan")
+            reset.innerHTML = ""
+            let resetInput = document.getElementById("inputSueldo")
+            resetInput.value = ""
+            let resetFrm = document.getElementById("mostrarOpciones")
+            resetFrm.innerHTML = ""
+            mostrarContratos()
+        } else {
+            Swal.fire({
+                title: `RUT: ${rut}, YA TIENE UN PLAN ASOCIADO, DESEA ACTUALIZAR SUS DATOS?`,
+                text: "Actualizar?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "Sí, Quiero Tomar este nuevo plan",
+                cancelButtonText: "Cancelar",
+            }).then(resultado => {
+                if (resultado.value) {
+                    // eliminamos contrato previo
+                    let contratosStorage = JSON.parse(localStorage.getItem("contratosRealizados"))
+                    let contratosArray = contratosStorage.findIndex(element => element.rut == rut)
+                    contratosStorage.splice(contratosArray, 1)
+                    contratosRealizados.splice(contratosArray, 1)
+                    let contratosJson = JSON.stringify(contratosStorage)
+                    localStorage.setItem("contratosRealizados", contratosJson)
+                    //creamos contrato nuevo en caso de querer actualizar
+                    let contratoCreado = new Contrato(contratosRealizados.length + 1, rut, nombre, edad, telefono, plan)
+                    contratosRealizados.push(contratoCreado)
+                    localStorage.setItem("contratosRealizados", JSON.stringify(contratosRealizados))
+                    Swal.fire({
+                        title: `FELICIDADES!`,
+                        text: `Has Cambiado tu plan al ${plan} `
+                    })
+                    let reset = document.getElementById("crearContratoPlan")
+                    reset.innerHTML = ""
+                    let resetInput = document.getElementById("inputSueldo")
+                    resetInput.value = ""
+                    let resetFrm = document.getElementById("mostrarOpciones")
+                    resetFrm.innerHTML = ""
+                    mostrarContratos()
+                }
+            })
+
+        }
+    } else {
         Swal.fire({
             title: `UPS!`,
             text: `Debes Completar Todos los Campos para poder contratar un plan`
@@ -269,7 +323,7 @@ function crearContrato() {
 const mostrarContratos = async () => {
     resetear()
     let divMostrar = document.getElementById("mostrarContratos")
-        if (contratosRealizados.length > 0) {
+    if (contratosRealizados.length > 0) {
         divMostrar.innerHTML = ""
         contratosRealizados.forEach((contra) => {
 
@@ -278,6 +332,7 @@ const mostrarContratos = async () => {
             dvMostrar.innerHTML = `<br>
         <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
         <h4><strong>Contrato de: ${contra.nombre}</strong></h4>
+        <p class="text-faded mb-0"><strong>Rut: ${contra.rut}</strong></p>
         <p class="text-faded mb-0"><strong>Edad: ${contra.edad}</strong></p>
         <p class="text-faded mb-0"><strong>Telefono: ${contra.telefono}<strong></p>
         <p class="text-faded mb-0"><strong>PLAN CONTRATADO: ${contra.planAsociado}<strong></p>
@@ -321,7 +376,7 @@ function eliminarContrato(evt) {
 
 }
 //Funciones para mostrar y ocultar informacion usando el mismo boton.
-function resetear(){
+function resetear() {
     let divOpciones = document.getElementById("mostrarOpciones")
     divOpciones.innerHTML = ""
     let divFormContrato = document.getElementById("crearContratoPlan")
@@ -329,7 +384,7 @@ function resetear(){
     let divPlanes = document.getElementById("mostrarPlanes")
     divPlanes.innerHTML = ""
     let sueldo = document.getElementById("inputSueldo")
-    sueldo.value=""
+    sueldo.value = ""
     let divContratos = document.getElementById("mostrarContratos")
     divContratos.innerHTML = ""
 }
@@ -364,7 +419,7 @@ let cargaPlanes = document.getElementById("cargarPlanes")
 cargaPlanes.addEventListener("click", muestraPlanes)
 let verOpciones = document.getElementById("inputSueldo")
 verOpciones.addEventListener("change", verOpcionesPlanes)
-verOpciones.addEventListener("focus",resetear)
+verOpciones.addEventListener("focus", resetear)
 let btnMostrarContratos = document.getElementById("cargarContratos")
 btnMostrarContratos.addEventListener("click", muestraContratos)
 
