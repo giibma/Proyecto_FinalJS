@@ -21,7 +21,7 @@ class Plan {
         return this.cobertura
     }
     devolverEventos() {
-        for(let i=0;this.eventos.length >= i;i++){
+        for (let i = 0; this.eventos.length >= i; i++) {
             return this.eventos[i]
         }
     }
@@ -47,7 +47,6 @@ class Contrato {
 const cargarPlanes = async () => {
     const respuesta = await fetch("./planes.json")
     const datos = await respuesta.json()
-    console.log(datos)
     for (let plan of datos) {
         let nuevoPlan = new Plan(plan.id, plan.nombre, plan.cobertura, plan.caracteristicas, plan.costo)
         carteraPlanes.push(nuevoPlan)
@@ -73,6 +72,7 @@ if (localStorage.getItem("contratosRealizados")) {
 
 //------------------------------------------------------------------------------
 //Funciones
+//funcion para mostrar los planes disponibles
 const planesDisponibles = async () => {
     let divSeleccion = document.getElementById("mostrarPlanes")
     divSeleccion.innerHTML = ""
@@ -93,6 +93,7 @@ const planesDisponibles = async () => {
 
     })
 }
+//funcion para obtener el id del boton "verdetalles" y mostrar informacion correspondiente
 function verDetallePlan(evt) {
 
     let id = evt.target.id
@@ -112,14 +113,12 @@ function verDetallePlan(evt) {
 
 
     })
-    
+
 }
 //Funcion para controlar mediante el evento change las opciones de planes segun el sueldo ingresado.
-
 const verOpcionesPlanes = async () => {
     let sueldo = document.getElementById("inputSueldo").value
-    let prima = sueldo * 0.07
-    console.log(prima)
+    let prima = Math.round(sueldo * 0.07)
     let divSeleccion = document.getElementById("mostrarOpciones")
     divSeleccion.innerHTML = ""
     carteraPlanes.forEach((carteraPlanes) => {
@@ -136,9 +135,6 @@ const verOpcionesPlanes = async () => {
             divSeleccion.appendChild(mostrarPlan)
             let btnContrato = document.getElementById(`${carteraPlanes.id}`)
             btnContrato.addEventListener("click", formCrearContrato)
-
-
-
         }
         else if (prima < carteraPlanes.costo) {
             let mostrarPlan = document.createElement("div")
@@ -176,7 +172,7 @@ function formCrearContrato(evt) {
                         <br>   
                         <label for="formularioCreacionContrato" class="form-label">Ingresa tu Nombre</label>
                         <input type="text" class="form-control" id="rut" placeholder="Ingresa tu Rut o DNI">
-                        
+                        <label class="form-label" id="validaNombre"></label>
                     </div>
                     <div class="mb-3">
                         <label for="formularioCreacionContrato" class="form-label">Ingresa tu Edad</label>
@@ -196,12 +192,22 @@ function formCrearContrato(evt) {
                     </form>
                    `
     divForm.appendChild(div)
+
     let edad = document.getElementById("edad")
     edad.addEventListener("change", validarEdad)
 
 }
+//Funcion para validar creacion
+function camposVacios(valor) {
+    if (valor != "") {
+        return true
 
-//Funcion validar edad para contratar plan
+    } else {
+        return false
+    }
+
+}
+
 function validarEdad() {
     let div = document.getElementById("crearContratoPlan")
     let edad = document.getElementById("edad").value
@@ -231,25 +237,31 @@ function crearContrato() {
     let edad = document.getElementById("edad").value
     let telefono = document.getElementById("telefono").value
     let plan = document.getElementById("nombrePlan").innerText
-    let contratoCreado = new Contrato(contratosRealizados.length + 1, rut, nombre, edad, telefono, plan)
-    console.log(contratoCreado)
-    contratosRealizados.push(contratoCreado)
-    localStorage.setItem("contratosRealizados", JSON.stringify(contratosRealizados))
-    Swal.fire({
-        title: `FELICIDADES!`,
-        text: `Has Contratado el ${plan} `
-    })
-    let reset = document.getElementById("crearContratoPlan")
-    reset.innerHTML = ""
-    let resetInput = document.getElementById("inputSueldo")
-    resetInput.value = ""
-    let resetFrm = document.getElementById("mostrarOpciones")
-    resetFrm.innerHTML = ""
-    mostrarContratos()
+    if ((camposVacios(rut) == true && camposVacios(nombre) == true && camposVacios(telefono) == true)) {
+        let contratoCreado = new Contrato(contratosRealizados.length + 1, rut, nombre, edad, telefono, plan)
+        console.log(contratoCreado)
+        contratosRealizados.push(contratoCreado)
+        localStorage.setItem("contratosRealizados", JSON.stringify(contratosRealizados))
+        Swal.fire({
+            title: `FELICIDADES!`,
+            text: `Has Contratado el ${plan} `
+        })
+        let reset = document.getElementById("crearContratoPlan")
+        reset.innerHTML = ""
+        let resetInput = document.getElementById("inputSueldo")
+        resetInput.value = ""
+        let resetFrm = document.getElementById("mostrarOpciones")
+        resetFrm.innerHTML = ""
+        mostrarContratos()
+    }else{
+        Swal.fire({
+            title: `UPS!`,
+            text: `Debes Completar Todos los Campos para poder contratar un plan`
+        })
+    }
+
 }
-
 // muestra todos los contratos ya creados.
-
 const mostrarContratos = async () => {
     let divMostrar = document.getElementById("mostrarContratos")
 
@@ -307,8 +319,6 @@ function eliminarContrato(evt) {
     })
 
 }
-
-
 //Funciones para mostrar y ocultar informacion usando el mismo boton.
 function muestraPlanes() {
     divPlanes = document.getElementById("mostrarPlanes")
@@ -320,20 +330,20 @@ function muestraPlanes() {
     }
 }
 function muestraContratos() {
-    divContratos = document.getElementById("mostrarContratos")
+    let divContratos = document.getElementById("mostrarContratos")
     if (divContratos.innerHTML == "") {
         mostrarContratos()
     } else {
         divContratos.innerHTML = ""
     }
 }
-const mostrarFormCreacion=async()=>{
+const mostrarFormCreacion = async () => {
     divCreacion = document.getElementById("crearPlanes")
-    if(divCreacion.innerHTML ==""){
+    if (divCreacion.innerHTML == "") {
         cargarMenuCreacion()
     }
-    else{
-        divCreacion.innerHTML=""
+    else {
+        divCreacion.innerHTML = ""
     }
 }
 //Seccion HTML index
