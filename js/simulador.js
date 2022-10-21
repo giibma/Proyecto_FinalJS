@@ -41,7 +41,7 @@ class Contrato {
     devolverId() {
         return this.id
     }
-    devolverNombre(){
+    devolverNombre() {
         return this.nombre
     }
 }
