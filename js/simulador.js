@@ -76,7 +76,7 @@ if (localStorage.getItem("contratosRealizados")) {
 //------------------------------------------------------------------------------
 //Funciones
 //funcion para mostrar los planes disponibles
-const planesDisponibles = async () => {
+function planesDisponibles(){
     resetear()
     let divSeleccion = document.getElementById("mostrarPlanes")
     divSeleccion.innerHTML = ""
@@ -99,7 +99,7 @@ const planesDisponibles = async () => {
     })
 }
 //funcion para obtener el id del boton "verdetalles" y mostrar informacion correspondiente
-async function verDetallePlan(evt) {
+function verDetallePlan(evt) {
 
     let id = evt.target.id
     let plan = carteraPlanes.find(function (element) {
@@ -123,7 +123,7 @@ async function verDetallePlan(evt) {
 
 }
 //Funcion para controlar mediante el evento change las opciones de planes segun el sueldo ingresado.
-const verOpcionesPlanes = async () => {
+function verOpcionesPlanes(){
     let sueldo = document.getElementById("inputSueldo").value
     let prima = Math.round(sueldo * 0.07)
     let divSeleccion = document.getElementById("mostrarOpciones")
@@ -162,7 +162,7 @@ const verOpcionesPlanes = async () => {
 }
 
 //funcion para crear el formulario para contratar un plan segun la opcion que tengas.
-async function formCrearContrato(evt) {
+function formCrearContrato(evt) {
 
     let id = evt.target.id
     let plan = carteraPlanes.find(function (element) {
