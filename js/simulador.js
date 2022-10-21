@@ -212,7 +212,6 @@ function validarEdad() {
     let div = document.getElementById("crearContratoPlan")
     let edad = document.getElementById("edad").value
     let crearBtn = document.getElementById("areaBoton")
-    console.log(edad)
     if (edad >= 18) {
         crearBtn.innerHTML = ``
         crearBtn.innerHTML = `<button type="button" class="btn btn-secondary btn-lg" id="contratarPlan">Contratar Plan!</button></div>`
@@ -239,7 +238,6 @@ function crearContrato() {
     let plan = document.getElementById("nombrePlan").innerText
     if ((camposVacios(rut) == true && camposVacios(nombre) == true && camposVacios(telefono) == true)) {
         let contratoCreado = new Contrato(contratosRealizados.length + 1, rut, nombre, edad, telefono, plan)
-        console.log(contratoCreado)
         contratosRealizados.push(contratoCreado)
         localStorage.setItem("contratosRealizados", JSON.stringify(contratosRealizados))
         Swal.fire({
@@ -296,7 +294,6 @@ const mostrarContratos = async () => {
 function eliminarContrato(evt) {
 
     let idBoton = evt.target.id
-    console.log(idBoton)
     Swal.fire({
         title: `Eliminar Contrato ID: ${idBoton}`,
         text: "¿Eliminar?",
@@ -307,9 +304,7 @@ function eliminarContrato(evt) {
     }).then(resultado => {
         if (resultado.value) {
             let contratosStorage = JSON.parse(localStorage.getItem("contratosRealizados"))
-            console.log(contratosStorage)
             let contratosArray = contratosStorage.findIndex(element => element.id == idBoton)
-            console.log(contratosArray)
             contratosStorage.splice(contratosArray, 1)
             contratosRealizados.splice(contratosArray, 1)
             let contratosJson = JSON.stringify(contratosStorage)
